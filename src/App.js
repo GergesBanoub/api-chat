@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { FaPaperclip, FaSmile, FaPaperPlane } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
+import { LuUser } from "react-icons/lu";
+import { SiGooglegemini } from "react-icons/si";
 import "./App.css";
-import AdaaLogo from "./assets/logo.svg";
+import AdaaLogo from "./logo.png";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -11,20 +13,27 @@ function App() {
 
   // Predefined questions
   const predefinedQuestions = [
-    "ماهو التحول الرقمي",
-    "كيف يتم تصنيف البيانات وفقًا لمجال تصنيف البيانات وما هي المعايير المستخدمة في ذلك",
-    " كيف يمكن للجهة تقييم الأثر المترتب على الإفصاح غير المصرح به عن البيانات",
-    "ما هي مؤشرات الأداء الرئيسية التي يجب تحديدها لقياس فعالية خطة تصنيف البيانات"
+    "كيف يتم تصنيف البيانات وفقًا لمجال تصنيف البيانات وما هي المعايير المستخدمة في ذلك؟",
+    " كيف يمكن للجهة تقييم الأثر المترتب على الإفصاح غير المصرح به عن البيانات؟",
+    "ما هي مؤشرات الأداء الرئيسية التي يجب تحديدها لقياس فعالية خطة تصنيف البيانات؟",
+    "ماهو التحول الرقمي؟",
   ];
 
   const sendMessage = async (messageText) => {
-    const userInput = messageText || input; // Use passed messageText if provided, otherwise use the input state
-    if (userInput.trim() === "") return;
-
-    const userMessage = { sender: "user", text: userInput };
+    let userInput;
+    if(typeof messageText === 'string'){
+      userInput = messageText;
+    }else{
+       userInput = input;
+    }
+    
+    console.log( userInput);
+    const clearUserInput = userInput.trim();
+    if (clearUserInput){
+      const userMessage = { sender: "user", text: userInput };
     setMessages([...messages, userMessage]);
 
-    setLoading(true); // Show loading animation
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:5000/api/v1/nlp/index/answer/1", {
@@ -48,6 +57,12 @@ function App() {
       setLoading(false); // Hide loading animation
       setInput(""); // Clear input
     }
+
+    }else{
+      console.log('Empty user input ! ')
+      return;
+    };
+    
   };
 
   // Function to apply pretty formatting
@@ -56,7 +71,7 @@ function App() {
   };
 
   const handlePredefinedQuestionClick = (question) => {
-    sendMessage(question); // Send the predefined question to the API directly
+    sendMessage(question);
   };
 
   return (
@@ -71,26 +86,9 @@ function App() {
       {/* Chat Window */}
       <div className="chat-container">
         <div className="chat-window">
-          <div className="chat-messages">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`message ${message.sender === "user" ? "user-message" : "bot-message"}`}
-              >
-                {message.text}
-              </div>
-            ))}
-
-            {/* Display loading animation while waiting for API response */}
-            {loading && (
-              <div className="message bot-message loading">
-                <p>...جاري التحميل</p>
-              </div>
-            )}
-
-            {/* Predefined Questions in the middle of the chat */}
-            {showPredefinedQuestions && (
+        {messages.length < 1 && (
               <div className="predefined-questions-container">
+                <div className="predefined-questions-area">
                 {predefinedQuestions.map((question, index) => (
                   <button
                     key={index}
@@ -100,9 +98,43 @@ function App() {
                     {question}
                   </button>
                 ))}
+                </div>
               </div>
             )}
+          {
+            messages.length > 0  && (
+              <div className="chat-messages">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`message ${message.sender === "user" ? "user-message" : "bot-message"}`}
+              >
+                {message.sender === "user" && <div className="user-avatar">
+                  <LuUser />
+                  </div>}
+                {message.sender !== "user" && <div className="ai-avatar">
+                  <SiGooglegemini />
+                  </div>}
+                  <div>
+                    {message.text}
+                  </div>
+              </div>
+            ))}
+
+            {/* Display loading animation while waiting for API response */}
+            { loading && (
+              <div className="message bot-message loading">
+                <div className="ai-avatar">
+                <SiGooglegemini />
+                  </div>
+                <div>جاري التحميل ...</div>
+              </div>
+            )}
+
+            {/* Predefined Questions in the middle of the chat */}
           </div>
+            )
+          }
 
           {/* Chat Input */}
           <div className="chat-input">
@@ -116,7 +148,9 @@ function App() {
               style={{ textAlign: "right", direction: "rtl" }} // Align text input to the right
             />
             {/* <FaSmile className="icon" /> */}
+            <div className="send-msg">
             <FaPaperPlane className="icon" onClick={sendMessage} />
+            </div>
           </div>
         </div>
       </div>
