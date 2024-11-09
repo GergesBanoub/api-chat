@@ -13,10 +13,10 @@ function App() {
 
   // Predefined questions
   const predefinedQuestions = [
-    "كيف يتم تصنيف البيانات وفقًا لمجال تصنيف البيانات وما هي المعايير المستخدمة في ذلك؟",
-    " كيف يمكن للجهة تقييم الأثر المترتب على الإفصاح غير المصرح به عن البيانات؟",
-    "ما هي مؤشرات الأداء الرئيسية التي يجب تحديدها لقياس فعالية خطة تصنيف البيانات؟",
-    "ماهو التحول الرقمي؟",
+    "كيف يتم تصنيف البيانات وما هي المعايير المستخدمة في ذلك؟",
+    "ما هي ركائز وعناصر سياسات الحكومة الرقمية",
+    "ما هي سياسات الرصد والتقييم؟",
+    "مالهدف من مسودة السياسة التشغيلية؟",
   ];
 
   const sendMessage = async (messageText) => {
@@ -36,10 +36,10 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/v1/nlp/index/answer/1", {
+      const response = await fetch("http://10.110.128.7:5000/api/v1/nlp/index/answer/1", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: userInput, limit: 2 })
+        body: JSON.stringify({ text: userInput, limit: 5 })
       });
 
       const data = await response.json();
