@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 import { LuUser } from "react-icons/lu";
 import { SiGooglegemini } from "react-icons/si";
-import "./App.css";
+import PrettyFormatText from "./PrettyFormatText"
 import AdaaLogo from "./logo.png";
+import "./App.css";
 
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false); // To manage loading state
-  const [showPredefinedQuestions, setShowPredefinedQuestions] = useState(true); // Manage predefined questions visibility
+  const [loading, setLoading] = useState(false);
+  const [showPredefinedQuestions, setShowPredefinedQuestions] = useState(true);
 
   // Predefined questions
   const predefinedQuestions = [
@@ -27,7 +28,6 @@ function App() {
        userInput = input;
     }
     
-    console.log( userInput);
     const clearUserInput = userInput.trim();
     if (clearUserInput){
       const userMessage = { sender: "user", text: userInput };
@@ -43,9 +43,9 @@ function App() {
       });
 
       const data = await response.json();
-      const formattedAnswer = prettyFormatText(data.answer || "لم يتم العثور على إجابة");
+      const Qanswer = (data.answer || "لم يتم العثور على إجابة");
 
-      const botMessage = { sender: "bot", text: formattedAnswer };
+      const botMessage = { sender: "bot", text: Qanswer };
 
       setMessages((prevMessages) => [...prevMessages, botMessage]);
 
@@ -65,10 +65,7 @@ function App() {
     
   };
 
-  // Function to apply pretty formatting
-  const prettyFormatText = (text) => {
-    return text.split("\n").map((str, index) => <p key={index}>{str}</p>);
-  };
+  
 
   const handlePredefinedQuestionClick = (question) => {
     sendMessage(question);
@@ -109,19 +106,14 @@ function App() {
                 key={index}
                 className={`message ${message.sender === "user" ? "user-message" : "bot-message"}`}
               >
-                {message.sender === "user" && <div className="user-avatar">
-                  <LuUser />
-                  </div>}
-                {message.sender !== "user" && <div className="ai-avatar">
-                  <SiGooglegemini />
-                  </div>}
-                  <div>
-                    {message.text}
-                  </div>
+                {message.sender === "user" && <div className="user-avatar"><LuUser /></div>}
+                {message.sender !== "user" && <div className="ai-avatar"><SiGooglegemini /></div>}
+                {message.sender === "user" && <div>{message.text}</div>}
+                {message.sender !== "user" && <div><PrettyFormatText text={message.text} /></div>}
+                  
               </div>
             ))}
 
-            {/* Display loading animation while waiting for API response */}
             { loading && (
               <div className="message bot-message loading">
                 <div className="ai-avatar">
@@ -131,25 +123,22 @@ function App() {
               </div>
             )}
 
-            {/* Predefined Questions in the middle of the chat */}
+
           </div>
             )
           }
 
-          {/* Chat Input */}
           <div className="chat-input">
-            {/* <FaPaperclip className="icon" /> */}
             <input
               type="text"
               placeholder="تحدث مع مساعد اداء"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-              style={{ textAlign: "right", direction: "rtl" }} // Align text input to the right
+              style={{ textAlign: "right", direction: "rtl" }}
             />
-            {/* <FaSmile className="icon" /> */}
-            <div className="send-msg">
-            <FaPaperPlane className="icon" onClick={sendMessage} />
+            <div className="send-msg" onClick={sendMessage}>
+            <FaPaperPlane className="icon" />
             </div>
           </div>
         </div>

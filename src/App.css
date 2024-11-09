@@ -54,10 +54,13 @@
   text-align: right; /* Align the messages to the right */
 }
 
+.chat-messages::-webkit-scrollbar {
+  display: none;
+}
+
 .message {
   padding: 15px;
   border-radius: 20px;
-  max-width: 60%;
   margin-bottom: 15px;
   text-align: right; /* Align each message's text to the right */
 }
@@ -83,7 +86,6 @@
 
 .bot-message {
   color: white;
-  margin-right: auto;
   font-family: 'FrutigerArabicCE45Light';
   align-items: center;
   display: flex;
@@ -98,6 +100,8 @@
   padding: 5px;
   border-radius: 50px;
   min-width: 30px;
+  margin-top: 0.75rem;
+  align-self: flex-start;
 }
 
 /* Predefined Questions Styling */
