@@ -2,7 +2,6 @@
 .app-container {
   display: flex;
   height: 100vh;
-  /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
   font-family: FrutigerRoman, Arial, sans-serif;
   background: rgb(2,89,73);
   background: linear-gradient(43deg, rgba(2,89,73,1) 0%, rgba(3,140,127,1) 33%, rgba(3,166,120,1) 66%, rgba(88,166,151,1) 100%);
@@ -194,3 +193,71 @@
   color: white;
 
 }
+
+.login-container{
+  width: 100%;
+  height: 100%;
+}
+
+.login-flex{
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.login-branding{
+  background-image: url('./assets/images/illustration.png');
+  -webkit-background-size:cover;
+  background-repeat: no-repeat;
+  width: 100%;
+}
+
+.login-form-container{
+  background-color: white;
+  width: 600px;
+}
+
+.login-logo{
+  margin:3rem;
+}
+
+.form-inputs{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10rem;
+  margin-bottom: 10rem;
+  }
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+}
+
+.login-form > * {
+  margin: 0.5rem;
+  direction: rtl;
+  font-family: 'FrutigerArabicCE45Light';
+
+}
+.login-button{
+  background-color: #00685E;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding-left: 2rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.form-input{
+  padding: 0.5rem;
+  outline: none;
+}
+
+
+

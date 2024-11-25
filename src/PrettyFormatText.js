@@ -3,33 +3,24 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 // Define the typing effect component
-const PrettyFormatText = ({ text }) => {
-  const [currentText, setCurrentText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+const PrettyFormatText = ({ text, typingSpeed = 10 }) => {
+  const [displayedText, setDisplayedText] = useState(""); // Tracks the text being displayed
+  const [currentIndex, setCurrentIndex] = useState(0); // Tracks the current character index
 
   useEffect(() => {
-    if (!text || isTyping || typeof text !== 'string') return; // Add type check for string
+    if (currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayedText((prev) => prev + text[currentIndex]);
+        setCurrentIndex((prev) => prev + 1);
+      }, typingSpeed);
 
-    const textX = text.replace(/\\n/g, '\n');
-    let i = 0;
-
-    // Simulate the typing effect
-    const intervalId = setInterval(() => {
-      setCurrentText((prev) => prev + textX[i]);
-      i++;
-
-      if (i === textX.length - 1) {
-        clearInterval(intervalId);
-      }
-    }, 5); // Adjust typing speed here (100ms between characters)
-
-    // Clean up interval on unmount
-    return () => clearInterval(intervalId);
-  }, [text, isTyping]);
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, text, typingSpeed]);
 
   return (
     <div style={{ textAlign: "right", direction: "rtl" }}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{currentText}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayedText}</ReactMarkdown>
     </div>
   );
 };
